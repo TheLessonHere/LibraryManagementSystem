@@ -9,10 +9,12 @@ namespace LibraryServices
 {
     public class LibraryAssetService : ILibraryAsset
     {
+        // This class holds the definition for our helper functions/services that the interface uses to get data from the server
         private LibraryContext _context;
 
         public LibraryAssetService(LibraryContext context)
         {
+            // Set our private _context field equal to the LibraryContext
             _context = context;
         }
         public void Add(LibraryAsset newAsset)

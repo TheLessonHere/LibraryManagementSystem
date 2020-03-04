@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using LibraryServices;
 
 namespace lmsClient
 {
@@ -26,7 +27,9 @@ namespace lmsClient
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
+            services.AddSingleton(Configuration);
+            services.AddScoped<ILibraryAsset, LibraryAssetService>();
+            // Set up the DbContext so that we can connect to our LibraryContext sqlserver
             services.AddDbContext<LibraryContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("LibraryConnection")));
         }

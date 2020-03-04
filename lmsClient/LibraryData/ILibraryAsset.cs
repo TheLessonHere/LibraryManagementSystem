@@ -7,6 +7,7 @@ namespace LibraryData
 {
     public interface ILibraryAsset
     {
+        // Interface holds our collection of helper functions that will be used in the controller and services
         IEnumerable<LibraryAsset> GetAll();
         LibraryAsset GetById(int id);
         void Add(LibraryAsset newAsset);
