@@ -11,9 +11,11 @@ namespace lmsClient.Controllers
     public class CatalogController : Controller
     {
         private ILibraryAsset _assets;
-        public CatalogController(ILibraryAsset assets)
+        private ICheckout _checkouts;
+        public CatalogController(ILibraryAsset assets, ICheckout checkouts)
         {
             _assets = assets;
+            _checkouts = checkouts;
         }
 
         public IActionResult Index()
@@ -47,10 +49,18 @@ namespace lmsClient.Controllers
         {
             var asset = _assets.GetById(id);
 
+            var currentHolds = _checkouts.GetCurrentHolds(id)
+                .Select(asset => new AssetHoldModel
+                {
+                    HoldPlaced = _checkouts.GetCurrentHoldPlaced(asset.Id).ToString("d"),
+                    PatronName = _checkouts.GetCurrentHoldPatronName(asset.Id)
+                });
+
             var model = new AssetDetailModel
             {
                 AssetId = id,
                 Title = asset.Title,
+                Type = _assets.GetType(id),
                 Year = asset.Year,
                 Cost = asset.Cost,
                 Status = asset.Status.Name,
@@ -60,6 +70,10 @@ namespace lmsClient.Controllers
                 CurrentLocation = _assets.GetCurrentLocation(id).Name,
                 DeweyCallNumber = _assets.GetDeweyIndex(id),
                 ISBN = _assets.GetIsbn(id),
+                CheckoutHistory = _checkouts.GetCheckoutHistory(id),
+                LatestCheckout = _checkouts.GetLatestCheckout(id),
+                PatronName = _checkouts.GetCurrentCheckoutPatron(id),
+                CurrentHolds = currentHolds
             };
 
             return View(model);

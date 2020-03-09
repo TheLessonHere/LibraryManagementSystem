@@ -29,6 +29,7 @@ namespace lmsClient
             services.AddControllersWithViews();
             services.AddSingleton(Configuration);
             services.AddScoped<ILibraryAsset, LibraryAssetService>();
+            services.AddScoped<ICheckout, CheckoutService>();
             // Set up the DbContext so that we can connect to our LibraryContext sqlserver
             services.AddDbContext<LibraryContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("LibraryConnection")));
