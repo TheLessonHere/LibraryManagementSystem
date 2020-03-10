@@ -144,7 +144,7 @@ namespace LibraryServices
             _context.Add(checkoutHistory);
             _context.SaveChanges();
         }
-        public void CheckInItem(int assetId, int libraryCardId)
+        public void CheckInItem(int assetId)
         {
             var now = DateTime.Now;
 
@@ -168,6 +168,7 @@ namespace LibraryServices
             if (currentHolds.Any())
             {
                 CheckoutToEarliestHold(assetId, currentHolds);
+                return;
             }
 
             // Otherwise, change status to available

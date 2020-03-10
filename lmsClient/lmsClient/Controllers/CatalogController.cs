@@ -92,6 +92,12 @@ namespace lmsClient.Controllers
 
             return View(model);
         }
+
+        public IActionResult CheckIn(int id)
+        {
+            _checkouts.CheckInItem(id);
+            return RedirectToAction("Detail", new { id = id });
+        }
         
         public IActionResult Hold(int id)
         {
@@ -110,16 +116,16 @@ namespace lmsClient.Controllers
             return View(model);
         }
 
-        public IActionResult MarkLost(int assetId)
+        public IActionResult MarkLost(int id)
         {
-            _checkouts.MarkLost(assetId);
-            return RedirectToAction("Detail", new { id = assetId });
+            _checkouts.MarkLost(id);
+            return RedirectToAction("Detail", new { id = id });
         }
 
-        public IActionResult MarkFound(int assetId)
+        public IActionResult MarkFound(int id)
         {
-            _checkouts.MarkFound(assetId);
-            return RedirectToAction("Detail", new { id = assetId });
+            _checkouts.MarkFound(id);
+            return RedirectToAction("Detail", new { id = id });
         }
 
         [HttpPost]
