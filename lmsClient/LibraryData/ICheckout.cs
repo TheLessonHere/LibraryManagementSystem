@@ -19,6 +19,8 @@ namespace LibraryData
         // String getters
         string GetCurrentHoldPatronName(int id);
         string GetCurrentCheckoutPatron(int assetId);
+        // Boolean getters
+        bool IsCheckedOut(int id);
         // DateTime getters
         DateTime GetCurrentHoldPlaced(int id);
         // Update methods

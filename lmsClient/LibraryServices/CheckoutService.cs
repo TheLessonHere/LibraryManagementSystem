@@ -87,6 +87,13 @@ namespace LibraryServices
 
             return patron.FirstName + " " + patron.LastName;
         }
+        // Boolean getters
+        public bool IsCheckedOut(int assetId)
+        {
+            return _context.Checkouts
+                .Where(checkout => checkout.LibraryAsset.Id == assetId)
+                .Any();
+        }
         // DateTime getters
         public DateTime GetCurrentHoldPlaced(int holdId)
         {
@@ -100,11 +107,7 @@ namespace LibraryServices
         // Update methods
         public void CheckOutItem(int assetId, int libraryCardId)
         {
-            if (IsCheckedOut(assetId))
-            {
-                return;
-                // Logic to give feedback to the user can go here
-            }
+            if (IsCheckedOut(assetId)) return;
 
             // Update library asset status to Checked out
             var item = _context.LibraryAssets
@@ -177,6 +180,7 @@ namespace LibraryServices
             var now = DateTime.Now;
 
             var asset = _context.LibraryAssets
+                .Include(asset => asset.Status)
                 .FirstOrDefault(asset => asset.Id == assetId);
 
             var card = _context.LibraryCards
@@ -224,12 +228,6 @@ namespace LibraryServices
                 .Include(checkout => checkout.LibraryCard)
                 .FirstOrDefault(checkout => checkout.LibraryAsset.Id == assetId);
         }
-        private bool IsCheckedOut(int assetId)
-        {
-            return _context.Checkouts
-                .Where(checkout => checkout.LibraryAsset.Id == assetId)
-                .Any();
-        }
         private DateTime GetDefaultCheckoutTime(DateTime now)
         {
             return now.AddDays(30);
@@ -249,6 +247,7 @@ namespace LibraryServices
         private void UpdateAssetStatus(int assetId, string statusType)
         {
             var item = _context.LibraryAssets
+                .Include(asset => asset.Status)
                 .FirstOrDefault(asset => asset.Id == assetId);
 
             _context.Update(item);
